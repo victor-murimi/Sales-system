@@ -3,8 +3,10 @@ from flask.helpers import url_for
 import psycopg2
 
 
-conn = psycopg2.connect(database='myduka', user='postgres',
-                        host='127.0.0.1', password='0742978312', port='5432')
+conn = psycopg2.connect(database='d46tf2r8k4k7fs', user='jyfgxevcheiwyn',
+                        host='ec2-54-195-195-81.eu-west-1.compute.amazonaws.com',
+                         password='f2608e2193f48c6dee3f9b6b5489a683eacfe536948c6d4ba6a3545dd84665e3',
+                          port='5432')
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS product1(id serial PRIMARY KEY,name VARCHAR(100),buying_price INT, selling_price INT,stock_quantity INT);")
 cur.execute("CREATE TABLE IF NOT EXISTS sales(id serial PRIMARY KEY,product_id INT,quantity INT,created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW())")
