@@ -1,0 +1,12 @@
+.container{
+    display: flex;
+    gap: 90px;
+}
+.form{
+    border: 1px solid white;
+}
+.extreme{
+    border: 1px solid #111;
+    height: 250px;
+    width: 150px;
+}
