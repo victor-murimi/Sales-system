@@ -3,9 +3,9 @@ from flask.helpers import url_for
 import psycopg2
 
 
-conn = psycopg2.connect(database='dei77imsme5qev', user='ojxcdeuckfotge',
+conn = psycopg2.connect(database='dchl22fvc5rqoo', user='xnvpmadkuzsgll',
                         host='ec2-54-195-195-81.eu-west-1.compute.amazonaws.com',
-                         password='68709d3ddd7cbd4549c1d37b33af675085afd0440cb67c87ac08247322c7eda8',
+                         password='d018681e80fd99ec185da392c5a79692bcf01272e1945eb79457f77fb8e4264d',
                           port='5432')
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS product1(id serial PRIMARY KEY,name VARCHAR(100),buying_price INT, selling_price INT,stock_quantity INT);")
