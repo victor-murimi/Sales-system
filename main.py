@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, redirect
 from flask.helpers import url_for
 import psycopg2
 
-
 conn = psycopg2.connect(database='dchl22fvc5rqoo', user='xnvpmadkuzsgll',
                         host='ec2-54-195-195-81.eu-west-1.compute.amazonaws.com',
                          password='d018681e80fd99ec185da392c5a79692bcf01272e1945eb79457f77fb8e4264d',
