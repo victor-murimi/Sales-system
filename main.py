@@ -97,4 +97,5 @@ def stock():
     return render_template("stock.html")
 
 
-app.run()
+if __name__ == "__main__":
+    app.run(debug=True)
