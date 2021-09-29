@@ -2,21 +2,33 @@ from flask import Flask, request, render_template, redirect
 from flask.helpers import url_for
 import psycopg2
 
-conn = psycopg2.connect(database='dchl22fvc5rqoo', user='xnvpmadkuzsgll',
-                        host='ec2-54-195-195-81.eu-west-1.compute.amazonaws.com',
-                         password='d018681e80fd99ec185da392c5a79692bcf01272e1945eb79457f77fb8e4264d',
-                          port=5432)
+conn = psycopg2.connect(database='myduka', user='postgres',host='localhost',password='0742978312',port='5432')
+
+# conn = psycopg2.connect(database='dchl22fvc5rqoo', user='xnvpmadkuzsgll',
+#                         host='ec2-54-195-195-81.eu-west-1.compute.amazonaws.com',
+#                          password='d018681e80fd99ec185da392c5a79692bcf01272e1945eb79457f77fb8e4264d',
+#                           port=5432)
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS product1(id serial PRIMARY KEY,name VARCHAR(100),buying_price INT, selling_price INT,stock_quantity INT);")
 cur.execute("CREATE TABLE IF NOT EXISTS sales(id serial PRIMARY KEY,product_id INT,quantity INT,created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW())")
+cur.execute("CREATE TABLE IF NOT EXISTS users(id serial PRIMARY KEY,user_name VARCHAR(15),email VARCHAR(25),password VARCHAR(15))")
 conn.commit()
 app = Flask(__name__)
 
 
 @app.route("/")
 def index():
+
     return render_template("index.html")
 
+
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+@app.route("/signup")
+def signup():
+    return render_template("signup.html")
 
 @app.route("/inventory", methods=["POST", "GET"])
 def inventory():
@@ -50,14 +62,14 @@ def sales():
         cur.execute(""" select stock_quantity from product1 where id=%(r)s""",{"r":r})
         y=cur.fetchone()
         g=int(g)
-        print(g)
+        # print(g)
         b=y[0]-g
-        print(b)
+        # print(b)
         if b>=0:
             cur.execute(""" UPDATE product1 SET stock_quantity=%(b)s WHERE id=%(g)s""",{"b":b,"g":g})
             cur.execute("""INSERT INTO sales(product_id,quantity) VALUES(%(r)s,%(g)s);""",{"r":r,"g":g})
             conn.commit()
-            print(r,g)
+            # print(r,g)
 
             return redirect("/sales")
         else:
@@ -73,23 +85,24 @@ def sales():
 @app.route("/dashboard")
 def dashboard():
     cur=conn.cursor()
-    # cur.execute(""" SELECT sum((product1.selling_price-buying_price)*sales,quantity) as profit FROM product1 JOIN sales on sales.product_id=product1.id """)
-    # s=cur.fetchall()
-    # c=[]
-    # n=[]
-    # for i in s:
-    #     c.append([s])
-    #     n.append([s])
-    #     print(s)
-    cur.execute("""SELECT sum((product1.selling_price-product1.buying_price)*sales.quantity) as profit FROM product1 JOIN sales on  sales.product_id=product1.id group by product1.name""")
+    cur.execute(""" SELECT product1.name ,SUM(sales.quantity)FROM sales JOIN product1 ON sales.product_id=product1.id 
+    GROUP BY product1.name""")
+    h=cur.fetchall()
+    g=[]
+    c=[]
+    for o in h:
+        g.append(o[0])
+        c.append(o[1])
+    print(g)
+    cur.execute("""SELECT sum((product1.selling_price-product1.buying_price)*sales.quantity) as profit,name FROM product1 JOIN sales on  sales.product_id=product1.id group by product1.name""")
     j=cur.fetchall()
     f=[]
     v=[]
     for i in j:
-        f.append(j[0])
-        v.append(j[1])
-        print(j)
-    return render_template("dashboard.html",j=j,f=f,v=v)
+        f.append(i[0])
+        v.append(i[1])
+    # print(j)
+    return render_template("dashboard.html",j=j,f=f,v=v,h=h,g=g,c=c)
 
 
 @app.route("/stock")

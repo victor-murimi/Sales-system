@@ -10,7 +10,7 @@
   <title>Blog Template · Bootstrap v5.1</title>
   <link rel="stylesheet" href="/static/index.css">
 
-  <!-- <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/blog/">
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/blog/">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"> -->
 
@@ -29,7 +29,27 @@
 
 <body class="body">
 
-  <div class="container bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+    
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#naarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" href="#">Home</a>
+          <a class="nav-link" href="/login">Login</a>
+          <a class="nav-link" href="/signup">Signup</a>
+          <a class="nav-link" href="/dashboard">dashbord</a>
+          <a class="nav-link" href="/sales">sales</a>
+          <a class="nav-link" href="/inventory">inventory</a>
+          <a class="nav-link" href="/stock">stock</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <!-- <div class="container bg-dark">
     <div class="nav-scroller py-1 mb-2">
       <nav class="nav d-flex justify-content-between">
         <a class="p-2 link-secondary" href="#">Home</a>
@@ -39,7 +59,7 @@
         <a class="p-2 link-secondary" href="/stock">stock</a>
       </nav>
     </div>
-  </div>
+  </div> -->
   <!-- <div class="display">
     <h1>Sales system</h1>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate, consequuntur. Esse iusto animi ea fugit odit
