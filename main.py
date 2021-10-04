@@ -11,7 +11,7 @@ conn = psycopg2.connect(database='myduka', user='postgres',host='localhost',pass
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS product1(id serial PRIMARY KEY,name VARCHAR(100),buying_price INT, selling_price INT,stock_quantity INT);")
 cur.execute("CREATE TABLE IF NOT EXISTS sales(id serial PRIMARY KEY,product_id INT,quantity INT,created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW())")
-cur.execute("CREATE TABLE IF NOT EXISTS users(id serial PRIMARY KEY,user_name VARCHAR(15),email VARCHAR(25),password VARCHAR(15))")
+cur.execute("CREATE TABLE IF NOT EXISTS users(id serial PRIMARY KEY,user_name VARCHAR(25),email VARCHAR(25),password VARCHAR(15))")
 conn.commit()
 app = Flask(__name__)
 
@@ -22,13 +22,33 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/login")
+@app.route("/login",methods=["POST","GET"])
 def login():
-    return render_template("login.html")
+    if request.method =="POST":
+        cur=conn.cursor()
+        z=request.form["email"]
+        y=request.form["password"]
+        cur.execute("""SELECT %(z)s from users where id=%(y)s""",{"z":z,"y":y})
+        conn.commit()
+        return redirect("/dashboard")
+    else:
+        print("not found")
+        return render_template("login.html")
 
-@app.route("/signup")
+@app.route("/signup",methods=["POST","GET"])
 def signup():
-    return render_template("signup.html")
+    if request.method =="POST":
+      cur=conn.cursor()
+      a=request.form["email"]
+      b=request.form["username"]
+      c=request.form["password"]
+      cur.execute("""INSERT INTO users (user_name,email,password)VALUES(%(a)s,%(b)s,%(c)s);""",{"a":a,"b":b,"c":c})
+      conn.commit()
+      return redirect("/dashboard")
+    else:
+        print("not found")
+        return render_template("signup.html")
+
 
 @app.route("/inventory", methods=["POST", "GET"])
 def inventory():
@@ -93,7 +113,7 @@ def dashboard():
     for o in h:
         g.append(o[0])
         c.append(o[1])
-    print(g)
+    # print(g)
     cur.execute("""SELECT sum((product1.selling_price-product1.buying_price)*sales.quantity) as profit,name FROM product1 JOIN sales on  sales.product_id=product1.id group by product1.name""")
     j=cur.fetchall()
     f=[]
