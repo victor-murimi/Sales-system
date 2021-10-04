@@ -2,12 +2,12 @@ from flask import Flask, request, render_template, redirect
 from flask.helpers import url_for
 import psycopg2
 
-conn = psycopg2.connect(database='myduka', user='postgres',host='localhost',password='0742978312',port='5432')
+# conn = psycopg2.connect(database='myduka', user='postgres',host='localhost',password='0742978312',port='5432')
 
-# conn = psycopg2.connect(database='dchl22fvc5rqoo', user='xnvpmadkuzsgll',
-#                         host='ec2-54-195-195-81.eu-west-1.compute.amazonaws.com',
-#                          password='d018681e80fd99ec185da392c5a79692bcf01272e1945eb79457f77fb8e4264d',
-#                           port=5432)
+conn = psycopg2.connect(database='dchl22fvc5rqoo', user='xnvpmadkuzsgll',
+                        host='ec2-54-195-195-81.eu-west-1.compute.amazonaws.com',
+                         password='d018681e80fd99ec185da392c5a79692bcf01272e1945eb79457f77fb8e4264d',
+                          port=5432)
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS product1(id serial PRIMARY KEY,name VARCHAR(100),buying_price INT, selling_price INT,stock_quantity INT);")
 cur.execute("CREATE TABLE IF NOT EXISTS sales(id serial PRIMARY KEY,product_id INT,quantity INT,created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW())")
