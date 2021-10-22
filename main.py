@@ -1,21 +1,22 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask,request, render_template, redirect,flash
 from flask.helpers import url_for
 import psycopg2
 
-# conn = psycopg2.connect(database='myduka', user='postgres',host='localhost',password='0742978312',port='5432')
+conn = psycopg2.connect(database='myduka', user='postgres',host='localhost',password='0742978312',port='5432')
 
-conn = psycopg2.connect(database='dchl22fvc5rqoo', user='xnvpmadkuzsgll',
-                        host='ec2-54-195-195-81.eu-west-1.compute.amazonaws.com',
-                         password='d018681e80fd99ec185da392c5a79692bcf01272e1945eb79457f77fb8e4264d',
-                          port=5432)
+# conn = psycopg2.connect(database='dchl22fvc5rqoo', user='xnvpmadkuzsgll',
+#                         host='ec2-54-195-195-81.eu-west-1.compute.amazonaws.com',
+#                          password='d018681e80fd99ec185da392c5a79692bcf01272e1945eb79457f77fb8e4264d',
+#                           port=5432)
 cur = conn.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS product1(id serial PRIMARY KEY,name VARCHAR(100),buying_price INT, selling_price INT,stock_quantity INT);")
 cur.execute("CREATE TABLE IF NOT EXISTS sales(id serial PRIMARY KEY,product_id INT,quantity INT,created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW())")
-cur.execute("CREATE TABLE IF NOT EXISTS users(id serial PRIMARY KEY,user_name VARCHAR(25),email VARCHAR(25),password VARCHAR(15))")
+cur.execute("CREATE TABLE IF NOT EXISTS users(id serial PRIMARY KEY,email VARCHAR(30),username VARCHAR(20),password VARCHAR(15))")
 conn.commit()
 app = Flask(__name__)
 
 
+app.secret_key = 'super secret key'
 @app.route("/")
 def index():
 
@@ -28,24 +29,45 @@ def login():
         cur=conn.cursor()
         z=request.form["email"]
         y=request.form["password"]
-        cur.execute("""SELECT %(z)s from users where id=%(y)s""",{"z":z,"y":y})
+        cur.execute("""SELECT email=%(z)s,password=%(y)s from users""",{"z":z,"y":y})
         conn.commit()
+        
+        
+        print(z)
         return redirect("/dashboard")
     else:
-        print("not found")
+        
+        flash("login unseccessful")
         return render_template("login.html")
 
 @app.route("/signup",methods=["POST","GET"])
 def signup():
-    if request.method =="POST":
-      cur=conn.cursor()
-      a=request.form["email"]
-      b=request.form["username"]
-      c=request.form["password"]
-      cur.execute("""INSERT INTO users (user_name,email,password)VALUES(%(a)s,%(b)s,%(c)s);""",{"a":a,"b":b,"c":c})
-      conn.commit()
-      return redirect("/dashboard")
-    else:
+  if request.method =="POST":
+    cur = conn.cursor()
+    email = request.form["email"]
+    username = request.form["username"]
+    password = request.form["password"]
+    cur.execute("""SELECT email FROM users """)
+    allemails=cur.fetchall()
+    print(allemails)
+    myemails=[]
+    for mail in allemails:
+        myemails.append(mail[0])
+        print(myemails)
+    if email not in myemails:
+
+        cur.execute("""INSERT INTO users (email,username,password) VALUES(%(email)s,%(username)s,%(password)s);""",{"email":email,"username":username,"password":password})
+        conn.commit()
+        print(" si hapa",email)
+       
+    else: 
+        
+        pass
+        flash("email  already exists")
+        print("hapa",email)
+        return redirect("/login")
+
+  else:
         print("not found")
         return render_template("signup.html")
 

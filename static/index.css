@@ -6,8 +6,12 @@
 .body{
     display:flexbox;
     background-image: url(/static/imagesimages/maxim-hopman-fiXLQXAhCfk-unsplash.jpg);
+    background-size: cover;
     background-repeat: no-repeat;
     
+}
+.navbar-nav{
+background-color: darkkhaki;
 }
 .bd-placeholder-img {
     font-size: 1.125rem;
