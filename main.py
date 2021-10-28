@@ -1,4 +1,4 @@
-from flask import Flask,request, render_template, redirect,flash
+from flask import Flask,request, render_template, redirect,flash,session
 from flask.helpers import url_for
 import psycopg2
 
@@ -17,9 +17,10 @@ app = Flask(__name__)
 
 
 app.secret_key = 'super secret key'
+
 @app.route("/")
 def index():
-
+    
     return render_template("index.html")
 
 
@@ -29,12 +30,36 @@ def login():
         cur=conn.cursor()
         z=request.form["email"]
         y=request.form["password"]
-        cur.execute("""SELECT email=%(z)s,password=%(y)s from users""",{"z":z,"y":y})
-        conn.commit()
+        cur.execute("""SELECT * from users WHERE email=%(z)s OR password=%(y)s """,{"z":z,"y":y})
+        u=cur.fetchone()
+        # ail=[]
+        # word=[]
+
+        if u:
+            print("something")
+            print(u)
+            if u[1] == z and u[3] == y:
+                print("correct credentials")   
+                return redirect(url_for('dashboard'))
+                
+            else:
+                print("kataa")
+                return redirect(url_for('login'))
+            # password na email match 
+
+            # invalids
+           
+
+        else :
+            print("User does not exist")
+            return redirect(url_for('login'))
+        # for t in u:
+        #     ail.append(t[1])
+        #     word.append(t[2])
+        # if z not in ail
         
-        
-        print(z)
-        return redirect("/dashboard")
+        # print(z)
+        # return redirect("/dashboard")
     else:
         
         flash("login unseccessful")
