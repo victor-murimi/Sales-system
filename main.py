@@ -24,7 +24,10 @@ app.secret_key = 'super secret key'
 @app.route("/")
 def index():
 
-    return render_template("index.html")
+    # session['logged_in'] = False
+    # if session['logged_in'] == False:
+    user = None
+    return render_template("index.html", user =user )
 
 
 def login_required(f):
@@ -41,6 +44,7 @@ def login_required(f):
 @app.route("/login", methods=["POST", "GET"])
 # @login_required
 def login():
+    
     if request.method == "POST":
         cur = conn.cursor()
         z = request.form["email"]
@@ -52,6 +56,8 @@ def login():
         # word=[]
 
         if user:
+            # session['logged_in'] = True
+            # login_user(user)
             print("something")
             print(user)
             if user[1] == z and user[3] == y:
@@ -84,9 +90,9 @@ def signup():
         allemails=cur.fetchall()
         print(allemails)
         myemails=[]
-    for mail in allemails:
-        myemails.append(mail[0])
-        print(myemails)
+        for mail in allemails:
+          myemails.append(mail[0])
+          print(myemails)
 
         if email not in myemails:
             cur.execute("""INSERT INTO users (email,username,password) VALUES(%(email)s,%(username)s,%(password)s);""", {
@@ -105,11 +111,12 @@ def signup():
         return render_template("signup.html")
 
 
-@ app.route("/inventory", methods=["POST", "GET"])
-@login_required
+@app.route("/inventory", methods=["POST", "GET"])
+# @login_required
 def inventory():
     if "user" in session:
       user=session["user"]
+      
       if request.method == "POST":
             cur=conn.cursor()
             m=request.form["name"]
@@ -131,8 +138,8 @@ def inventory():
             return render_template("inventory.html", y=y)
     else:
          return redirect(url_for("login"))
-@ app.route("/sales", methods=["POST", "GET"])
-@login_required
+@app.route("/sales", methods=["POST", "GET"])
+# @login_required
 def sales():
     if "user" in session:
         user=session["user"]
@@ -167,7 +174,7 @@ def sales():
     else:
         return redirect(url_for("login"))
 
-@ app.route("/dashboard")
+@app.route("/dashboard")
 def dashboard():
     cur=conn.cursor()
     cur.execute(""" SELECT product1.name ,SUM(sales.quantity)FROM sales JOIN product1 ON sales.product_id=product1.id
@@ -190,8 +197,8 @@ def dashboard():
     return render_template("dashboard.html", j=j, f=f, v=v, h=h, g=g, c=c)
 
 
-@ app.route("/stock")
-@login_required
+@app.route("/stock")
+# @login_required
 def stock():
     return render_template("stock.html")
 
