@@ -3,6 +3,7 @@ from functools import wraps
 from flask.helpers import url_for
 import psycopg2
 
+
 conn = psycopg2.connect(database='myduka', user='postgres',
                         host='localhost', password='0742978312', port='5432')
 
@@ -17,10 +18,9 @@ cur.execute("CREATE TABLE IF NOT EXISTS users(id serial PRIMARY KEY,email VARCHA
 conn.commit()
 app = Flask(__name__)
 
-
 app.secret_key = 'super secret key'
 
-
+    
 @app.route("/")
 def index():
 
@@ -112,7 +112,7 @@ def signup():
 
 
 @app.route("/inventory", methods=["POST", "GET"])
-# @login_required
+@login_required
 def inventory():
     if "user" in session:
       user=session["user"]
