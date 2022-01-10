@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-sm-6 col-md-4 col-md-offset-4">
                 <div class="panel panel-default">
-                    {% include'includes/alert.html'%}
+                    <!-- {% include'includes/alert.html'%} -->
                     <!-- {%with messages = get_flashed_messages() %}
                     {% if messages%}
             
@@ -39,6 +39,10 @@
                     </div>
                     <div class="panel-body">
                         <form role="form" action="/login" method="POST">
+                            <div>
+                                <h1>Registration</h1>
+                                {% include'includes/alert.html'%}
+                            </div>
                             <fieldset>
                                 <div class="row">
                                     <div class="center-block">

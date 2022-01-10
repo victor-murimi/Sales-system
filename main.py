@@ -112,7 +112,7 @@ def signup():
 
 
 @app.route("/inventory", methods=["POST", "GET"])
-@login_required
+# @login_required
 def inventory():
     if "user" in session:
       user=session["user"]
